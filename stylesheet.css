@@ -1,0 +1,53 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#header {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+}
+
+.content .intro {
+    color: #333;
+    margin: 20px;
+    padding: 15px;
+}
+
+#footer {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+}
+
+.link {
+    color: blue;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: green;
+}
+
+img {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+}
+
+/* Box model properties example */
+.content {
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.sports {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.sports img {
+    margin: 10px;
+    width: auto;
+    height: 1000px;
+}
