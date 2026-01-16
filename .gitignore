@@ -1,0 +1,26 @@
+# 1. Dependencies (Crucial - Never commit these)
+node_modules/
+
+# 2. Build Outputs (These are generated automatically)
+dist/
+.output/
+
+# 3. Astro Generated Files (For TypeScript/IntelliSense)
+.astro/
+
+# 4. Environment Variables (SECURITY RISK - Keep these secret)
+.env
+.env.*
+!.env.example
+# 5. OS & Tool junk
+.DS_Store
+.vscode/
+.idea/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 6. Optional: If you use the Cloudinary URL uploader
+# You might want to ignore a local folder of heavy images if you have one
+# assets/high-res-originals/
