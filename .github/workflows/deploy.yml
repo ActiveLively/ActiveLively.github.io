@@ -23,7 +23,8 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v2
         env:
-          # This passes your Cloudinary cloud name to the build process
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.PUBLIC_CLOUDINARY_CLOUD_NAME }}
 
   deploy:
