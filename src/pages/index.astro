@@ -1,11 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Greeting from '../components/Greeting';
+import { getCldImageUrl } from 'astro-cloudinary/helpers';
 
-const pageTitle = "Home Page";
+const pageTitle = "Welcome!";
+const backgroundUrl = getCldImageUrl({
+  src: 'https://res.cloudinary.com/dvwdetmhx/image/upload/v1768848111/9A1EECEF-A07B-43E1-827E-D510EEA674A8_1_201_a_l6bics.jpg', // Replace with your image ID
+  width: 1920,                       // Recommended for full-screen hero
+  height: 1080,
+  crop: 'fill'                       // Ensures it covers the area
+});
 ---
-<BaseLayout pageTitle={pageTitle}>
-  <h2>My awesome blog subtitle</h2>
-  <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
-  
+<BaseLayout > 
+  <div
+    class="hero min-h-screen"
+    style={`background-image: url(${backgroundUrl});`}
+  >
+    <div class="hero-overlay bg-black/20"></div>
+    <div class="hero-content text-neutral-content text-center">
+      <div class="max-w-md">
+        <h1 class="mb-5 text-5xl font-bold">Welcome!</h1>
+        <p class="mb-5">
+          Here's a fun website to share a little bit about myself!
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} /> -->
+  <div class="bottom-spacer"></div>
 </BaseLayout>
+<style>
+  h2 {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 0.5em;
+  }
+  .bottom-spacer {
+    height: 10rem; /* Adjust this number to increase/decrease space */
+  }
+</style>

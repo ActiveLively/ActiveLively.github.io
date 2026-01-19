@@ -4,8 +4,16 @@ import Footer from '../components/Footer.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Carousel from '../components/Carousel.astro';
 import { v2 as cloudinary } from 'cloudinary';
+import { getCldImageUrl } from 'astro-cloudinary/helpers';
 import '../styles/global.css';
 const pageTitle = "Photography";
+
+const backgroundUrl = getCldImageUrl({
+  src: 'https://res.cloudinary.com/dvwdetmhx/image/upload/v1768857650/DSC_1461-Enhanced-NR_xpmwbo.jpg',
+  width: 1920,                       // Recommended for full-screen hero
+  height: 1080,
+  crop: 'fill'                       // Ensures it covers the area
+});
 
 cloudinary.config({
     cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -34,6 +42,22 @@ const rockiesPhotos = await getImagesFromFolder('website/rockies');
 
 ---
 <BaseLayout pageTitle={pageTitle}>
+    <div
+        class="hero min-h-screen"
+        style={`background-image: url(${backgroundUrl});`}
+    >
+        <div class="hero-overlay bg-black/10"></div>
+        <div class="hero-content text-neutral-content text-center">
+        <div class="max-w-md">
+            <h1 class="mb-5 text-5xl font-bold">Some pics!</h1>
+            <p class="mb-5">
+            <!-- empty text right now -->
+            </p>
+        </div>
+        </div>
+    </div>
+
+
 
     <h2 class="carousel-title">Banff</h2>
     <Carousel images={banffPhotos} id="banff" />

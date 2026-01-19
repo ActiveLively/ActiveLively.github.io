@@ -2,57 +2,50 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 const pageTitle = "About Me";
 
-const identity = {
-  firstName: "Sarah",
-  country: "Canada",
-  occupation: "Technical Writer",
-  hobbies: ["photography", "birdwatching", "baseball"],
-};
+import '../styles/global.css';
+import { getCldImageUrl } from 'astro-cloudinary/helpers';
 
-const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Writing Docs"];
-
-const happy = true;
-const finished = false;
-const goal = 3;
-
-const skillColor = "crimson";
-const fontWeight = "bold";
-const textCase = "uppercase";
+const backgroundUrl = getCldImageUrl({
+  src: 'https://res.cloudinary.com/dvwdetmhx/image/upload/v1768857650/DSC_1461-Enhanced-NR_xpmwbo.jpg',
+});
 ---
 
 
 <BaseLayout pageTitle={pageTitle}>
-    <style define:vars={{skillColor, fontWeight, textCase}}>
-        .skill {
-            color: var(--skillColor);
-            font-weight: var(--fontWeight);
-            text-transform: var(--textCase);
-        }
-    </style>
+    <div class = "about-content">
+        <div class="hero bg-base-200 min-h-screen">
+            <div class="hero-content flex-col lg:flex-row text-[--bg-page] max-w-5xl mx-auto" >
+                <img
+                src="https://res.cloudinary.com/dvwdetmhx/image/upload/v1768860907/DSC_9237-Enhanced-NR_Original_1_mkrw4s.jpg"
+                class="max-w-sm rounded-lg shadow-2xl"
+                />
+                <div>
+                <h1 class="text-5xl font-bold text-black">Howdy!</h1>
+                <p class="py-6 text-black">
+                    Hi! My name is Joshua Huang! I'm a first year PhD student at Texas Tech University. I am advised by 
+                    <a 
+                        href="https://www.depts.ttu.edu/cs/faculty/Stas_tiomkin/stastiomkin.php" 
+                        target="_blank" 
+                        class="underline hover:text-gray-600 transition-colors"
+                    >
+                        Dr. Stas Tiomkin
+                    </a>
+                    and am part of the CI^2 Lab. My current research interests include robotics control, multi-modal sensing and processing, and process optimization. 
 
-    <h2>... and my new Astro site!</h2>
+                </p>
+                </div>
+            </div>
+        </div>
+    <div>
 
-    <p>I am working through Astro's introductory tutorial. This is the second page on my website, and it's the first one I built myself!</p>
+    </div>
 
-    <p>This site will update as I complete more of the tutorial, so keep checking back and see how my journey is going!</p>
-
-    <p>Here are a few facts about me:</p>
-    <ul>
-    <li>My name is {identity.firstName}.</li>
-    <li>I live in {identity.country} and I work as a {identity.occupation}.</li>
-    {identity.hobbies.length >= 2 &&
-        <li>Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}</li>
-    }
-    </ul>
-    <p>My skills are:</p>
-    <ul>
-        {skills.map((skill) => <li class = "skill">{skill}</li>)}
-    </ul>
-
-
-    {happy && <p>I am happy to be learning Astro!</p>}
-
-    {finished && <p>I finished this tutorial!</p>}
-
-    {goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
 </BaseLayout>
+
+<style>
+    .about-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+    }

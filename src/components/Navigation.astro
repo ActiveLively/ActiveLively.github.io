@@ -1,11 +1,35 @@
 ---
----
-<div id = "main-menu" class = "nav-links">
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/blog/">Blog</a>
-    <a href="/tags/">Tags</a>
-    <a href="/research/">Research</a>
-    <a href="/photography/">Photography</a>
-</div>
+import '../styles/global.css';
 
+const links = [
+  { url: "/", text: "Home" },
+  { url: "/about/", text: "About" },
+  { url: "/research/", text: "Research" },
+  { url: "/photography/", text: "Photography" },
+];
+---
+
+<div id="main-menu" class="nav-links flex justify-center items-center gap-8 w-full">
+  {links.map((link) => (
+    <a 
+      href={link.url}
+      class="
+        btn 
+        btn-ghost 
+        rounded-xl 
+        
+        /* Animations */
+        transition-transform 
+        duration-300 
+        motion-reduce:transition-none
+        origin-center
+        transform-gpu
+        
+        /* Note: No color or font classes here. 
+           The .nav-links a CSS selector targets this automatically. */
+      "
+    >
+      {link.text}
+    </a>
+  ))}
+</div>
