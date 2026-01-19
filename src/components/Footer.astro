@@ -1,9 +1,11 @@
 ---
 import Social from './Social.astro';
+import '../styles/global.css';
+
 ---
 
 <style>
-  footer {
+  Footer {
     /* 1. Layout & Spacing */
     display: flex;
     gap: 1rem;
@@ -15,13 +17,22 @@ import Social from './Social.astro';
     
     /* 3. Visuals */
     width: 100%;
-    background-color: #5b57a2;
+    background-color: var(--text-main);
     padding: 3rem;
   }
+.social-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
 </style>
 
 <footer >
-  <Social platform="twitter" username="astrodotbuild" />
-  <Social platform="github" username="withastro" />
-  <Social platform="youtube" username="astrodotbuild" />
+    <div class= "social-container">
+      <Social platform="github" username="activelively" />
+      <Social platform="linkedin" username="in/joshua-huang72" />
+      <!-- <Social platform="youtube" username="astrodotbuild" /> -->
+    </div>
 </footer>

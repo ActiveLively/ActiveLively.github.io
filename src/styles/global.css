@@ -1,7 +1,64 @@
-/* @import "tailwindcss"; */
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+:root {
+  /* --- Light Mode (Default) --- */
+  --bg-page: #f1f5f9;
+  --text-main: #000000;
+  
+  /*  Menu Button */
+  --bg-menu-btn: #0d0950;
+  --text-menu-btn: #ffffff;
+
+  /* Navigation Links */
+  --bg-nav-mobile: black;
+  --text-nav-link: black;   
+  
+  /* Navigation Hover */
+  --bg-nav-hover: black;
+  --text-nav-hover: white;     
+
+  /* General Links (Footer, Body) */
+  --text-link-accent: #0000EE; 
+}
+
+:root.dark {
+  /* --- Dark Mode Overrides --- */
+  --bg-page: #0d0950;
+  --text-main: #ffffff;
+
+  /* Hamburger Menu Button */
+  --bg-menu-btn: #ffffff;
+  --text-menu-btn: #000000;
+
+  /* Navigation Links */
+  --bg-nav-mobile: #0d0950;
+  --text-nav-link: #ffffff;   
+
+  /* Navigation Hover */
+  --bg-nav-hover: #ffffff;
+  --text-nav-hover: #0d0950;  
+
+  /* General Links (Footer, Body) */
+  --text-link-accent: #ff9776; 
+}
+
+/* Connect variables to Tailwind (Optional, but good for future) */
+@theme {
+  --color-page: var(--bg-page);
+  --color-text: var(--text-main);
+  --color-nav-link: var(--text-nav-link);
+}
+
+
+/* ========================================= */
+/* 2. THE LAYOUT (Apply Variables)           */
+/* ========================================= */
 
 html {
-  background-color: #f1f5f9;
+  background-color: var(--bg-page);
+  color: var(--text-main);
   font-family: sans-serif;
 }
 
@@ -17,13 +74,6 @@ body {
   min-height: 100vh; 
 }
 
-/* 1. Wrapper to constrain text width */
-.content-wrapper {
-  width: 100%;
-  max-width: 80ch;   
-  margin: 0 auto;   
-  padding: 1rem;
-}
 
 * {
   box-sizing: border-box;
@@ -34,112 +84,96 @@ h1 {
   font-size: 2.5rem;
 }
 
-/* 2. Hamburger Button */
+/* General Links (Not in nav) */
+a {
+  color: var(--text-link-accent);
+}
+
+
+/* ========================================= */
+/* 3. NAVIGATION COMPONENTS                  */
+/* ========================================= */
+
+/* Hamburger Button */
 .menu {
   display: flex; 
   align-items: center;
   justify-content: center;
   
-  background-color: #0d0950;
+  /* Use Variables */
+  background-color: var(--bg-menu-btn);
+  color: var(--text-menu-btn);
+  
   border: none;
-  color: #fff;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: normal;
   padding: 10px 20px;
   cursor: pointer;
   margin-bottom: 10px; 
 }
-/* 3. Navigation Links (MOBILE DEFAULT) */
+
+/* Nav Container (Mobile Default) */
 .nav-links {
-  display: none; /* Hidden by default on mobile */
-  flex-direction: column; /* Stack vertically on mobile */
+  display: none;
+  flex-direction: column;
   width: 100%;
-  background-color: #f1f5f9; /* Match background or make it distinct */
   margin: 0;
+
+  /* Use Variables */
+  background-color: var(--bg-nav-mobile);
 }
 
-/* Link Styling */
+/* Nav Links Styling */
 .nav-links a {
-  /* No need for display: block here, Flex handles it */
-  text-align: center;
+  text-align: left;
   padding: 15px 0;
   text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.0rem;
+  font-weight: normal;
   text-transform: uppercase;
-  color: #0d0950;
+  
+  /* Use Variables */
+  color: var(--text-nav-link);
 }
 
 /* Hover States */
 .nav-links a:hover,
 .nav-links a:focus {
-  background-color: #ff9776;
+  background-color: var(--bg-nav-hover);
+  color: var(--text-nav-hover);
 }
 
-/* 4. OPEN STATE (When button is clicked) */
-/* Switch from 'none' to 'flex' so the column direction works */
+/* Open State (Mobile) */
 :has(.menu[aria-expanded="true"]) .nav-links {
   display: flex; 
 }
 
 
-/* 5. DESKTOP VIEW */
+/* ========================================= */
+/* 4. Phone VIEW                             */
+/* ========================================= */
+
 @media screen and (min-width: 636px) {
   
-  /* Hide the hamburger button */
   .menu {
     display: none;
   }
 
-  /* Transform links into a horizontal row */
   .nav-links {
-    display: flex;            /* Turn on Flexbox */
-    flex-direction: row;      /* Side-by-side */
-    justify-content: center;  /* Center horizontally */
-    align-items: center;      /* Center vertically */
-    gap: 30px;                /* Space between links */
+    display: flex;            
+    flex-direction: row;      
+    justify-content: center;  
+    align-items: center;      
+    gap: 30px;                
     
-    /* Reset mobile styles */
     width: 100%;
     margin: 0;
     position: static;
-    background: none;
+    background: none; /* Transparent on desktop */
   }
 
-  /* Refine link padding for desktop */
   .nav-links a {
     padding: 10px 15px;
-    display: inline-block; /* Keeps hover effects tidy */
+    display: inline-block; 
   }
-}
-
-
-/* DARK MODE OVERRIDES */
-html.dark {
-  background-color: #0d0950;
-  color: #fff;
-}
-
-/* Update backgrounds for dark mode mobile menu */
-.dark .nav-links {
-  background-color: #0d0950;
-}
-
-.dark .menu {
-  background-color: #fff;
-  color: #000;
-}
-
-.dark .nav-links a:hover,
-.dark .nav-links a:focus {
-  background-color: #ff9776;
-  color: #0d0950;
-}
-
-.dark .nav-links a {
-  color: #fff;
-}
-
-.dark a {
-  color: #ff9776;
 }
