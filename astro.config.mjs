@@ -11,7 +11,6 @@ import preact from '@astrojs/preact';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://activelively.github.io',
-  base : '/ActiveLively.github.io/',
   integrations: [react(), preact()],
   vite: {
     plugins: [tailwindcss()]
