@@ -8,11 +8,11 @@
   --text-main: #000000;
   
   /*  Menu Button */
-  --bg-menu-btn: #0d0950;
-  --text-menu-btn: #ffffff;
+  --bg-menu-btn: #f1f5f9;
+  --text-menu-btn: black;
 
-  /* Navigation Links */
-  --bg-nav-mobile: black;
+  /* Navigation Links */    
+  --bg-nav-mobile: #f1f5f9;
   --text-nav-link: black;   
   
   /* Navigation Hover */
@@ -20,7 +20,7 @@
   --text-nav-hover: white;     
 
   /* General Links (Footer, Body) */
-  --text-link-accent: #0000EE; 
+  --text-link-accent: black; 
 }
 
 :root.dark {
@@ -41,7 +41,7 @@
   --text-nav-hover: #0d0950;  
 
   /* General Links (Footer, Body) */
-  --text-link-accent: #ff9776; 
+  --text-link-accent: white; 
 }
 
 /* Connect variables to Tailwind (Optional, but good for future) */
@@ -96,45 +96,40 @@ a {
 
 /* Hamburger Button */
 .menu {
-  display: flex; 
-  align-items: center;
-  justify-content: center;
-  
-  /* Use Variables */
-  background-color: var(--bg-menu-btn);
-  color: var(--text-menu-btn);
-  
-  border: none;
-  font-size: 1.2rem;
-  font-weight: normal;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-bottom: 10px; 
+
+  display: none; 
 }
 
-/* Nav Container (Mobile Default) */
-.nav-links {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-  margin: 0;
+/* Nav Container (Computer) */
 
-  /* Use Variables */
-  background-color: var(--bg-nav-mobile);
-}
+  .nav-links {
+    display: flex;            
+    flex-direction: row;      
+    justify-content: center;  
+    align-items: center;      
+    gap: 30px;                
+    
+    width: 100%;
+    margin: 0;
+    position: static;
+    color: var(--text-nav-link);
 
-/* Nav Links Styling */
-.nav-links a {
-  text-align: left;
-  padding: 15px 0;
-  text-decoration: none;
-  font-size: 1.0rem;
-  font-weight: normal;
-  text-transform: uppercase;
-  
-  /* Use Variables */
-  color: var(--text-nav-link);
-}
+    background: var(--bg-nav-mobile);
+  }
+
+  .nav-links a {
+    text-align: center;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 1.0rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    
+    /* Use Variables */
+    color: var(--text-nav-link);
+    padding: 10px 15px;
+    display: inline-block; 
+  }
 
 /* Hover States */
 .nav-links a:hover,
@@ -153,27 +148,46 @@ a {
 /* 4. Phone VIEW                             */
 /* ========================================= */
 
-@media screen and (min-width: 636px) {
+@media screen and (max-width: 636px) {
   
   .menu {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+    /* Use Variables */
+    background-color: var(--bg-menu-btn);
+    color: var(--text-menu-btn);
+    
+    border: none;
+    font-size: 1.2rem;
+    font-weight: normal;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 10px; 
   }
 
   .nav-links {
-    display: flex;            
-    flex-direction: row;      
-    justify-content: center;  
-    align-items: center;      
-    gap: 30px;                
-    
+    display: none;
+    flex-direction: column;
     width: 100%;
     margin: 0;
-    position: static;
-    background: none; /* Transparent on desktop */
-  }
 
-  .nav-links a {
+    /* Use Variables */
+    background-color: var(--bg-nav-mobile);
+    }
+
+    /* Nav Links Styling */
+    .nav-links a {
+    text-align: center;
+    font-size: 1.0rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    
+    /* Use Variables */
+    color: var(--text-nav-link);
     padding: 10px 15px;
-    display: inline-block; 
-  }
+
+    }
 }
