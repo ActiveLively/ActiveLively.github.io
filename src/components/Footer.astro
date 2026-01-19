@@ -1,0 +1,27 @@
+---
+import Social from './Social.astro';
+---
+
+<style>
+  footer {
+    /* 1. Layout & Spacing */
+    display: flex;
+    gap: 1rem;
+    justify-content: center; /* Centers the icons */
+    align-items: center;
+    
+    /* 2. "Sticky Bottom" Magic */
+    margin-top: auto; /* Pushes footer to bottom if body is a flex column */
+    
+    /* 3. Visuals */
+    width: 100%;
+    background-color: #5b57a2;
+    padding: 3rem;
+  }
+</style>
+
+<footer >
+  <Social platform="twitter" username="astrodotbuild" />
+  <Social platform="github" username="withastro" />
+  <Social platform="youtube" username="astrodotbuild" />
+</footer>
