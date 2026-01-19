@@ -8,8 +8,8 @@
   --text-main: #000000;
   
   /*  Menu Button */
-  --bg-menu-btn: #f1f5f9;
-  --text-menu-btn: black;
+  --bg-menu-btn: black;
+  --text-menu-btn: #f1f5f9;
 
   /* Navigation Links */    
   --bg-nav-mobile: #f1f5f9;
