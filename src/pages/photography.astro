@@ -37,8 +37,17 @@ async function getImagesFromFolder(folderName: string) {
   }
 }
 
-const banffPhotos = await getImagesFromFolder('website/banff');
-const rockiesPhotos = await getImagesFromFolder('website/rockies');
+ function shuffle(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const banffPhotos = shuffle(await getImagesFromFolder('website/banff'));
+const rockiesPhotos = shuffle(await getImagesFromFolder('website/rockies'));
+const grads = shuffle(await getImagesFromFolder('website/grads'));
 
 ---
 <BaseLayout pageTitle={pageTitle}>
@@ -58,12 +67,25 @@ const rockiesPhotos = await getImagesFromFolder('website/rockies');
     </div>
 
 
-
-    <h2 class="carousel-title">Banff</h2>
-    <Carousel images={banffPhotos} id="banff" />
+    <div data-aos="fade-up">
+        <h2 class="carousel-title">Banff</h2>
+        <Carousel images={banffPhotos} id="banff" />
+    </div>
+    
     <div class="carousel-spacer"></div>
-    <h2 class="carousel-title">Rocky Mountain National Park</h2>
-    <Carousel images={rockiesPhotos} id="rockies" />
+
+    <div data-aos="fade-up">
+        <h2 class="carousel-title">Rocky Mountain National Park</h2>
+        <Carousel images={rockiesPhotos} id="rockies" />
+    </div>
+
+    <div class="carousel-spacer"></div>
+
+    <div data-aos="fade-up">
+        <h2 class="carousel-title">Graduation</h2>
+        <Carousel images={grads} id="grads" />
+    </div>
+
     <div class="bottom-spacer"></div>
 </BaseLayout>
 

@@ -10,36 +10,37 @@ const backgroundUrl = getCldImageUrl({
 });
 ---
 
-
 <BaseLayout pageTitle={pageTitle}>
     <div class = "about-content">
-        <div class="hero bg-base-200 min-h-screen">
-            <div class="hero-content flex-col lg:flex-row text-[--bg-page] max-w-5xl mx-auto" >
+        <div class="hero min-h-screen">
+            <div class="hero-content flex-col lg:flex-row text-[--bg-page] max-w-5xl mx-auto gap-10 lg:gap-2" >
                 <img
                 src="https://res.cloudinary.com/dvwdetmhx/image/upload/v1768860907/DSC_9237-Enhanced-NR_Original_1_mkrw4s.jpg"
                 class="max-w-sm rounded-lg shadow-2xl"
                 />
-                <div>
-                <h1 class="text-5xl font-bold text-black">Howdy!</h1>
-                <p class="py-6 text-black">
+                <div class="lg:pl-20">
+                <h1 class="text-5xl font-bold text-[var(--text-main)]">Howdy!</h1>
+                <p class="py-6 text-[var(--text-main)]">
                     Hi! My name is Joshua Huang! I'm a first year PhD student at Texas Tech University. I am advised by 
                     <a 
                         href="https://www.depts.ttu.edu/cs/faculty/Stas_tiomkin/stastiomkin.php" 
-                        target="_blank" 
-                        class="underline hover:text-gray-600 transition-colors"
+                        target="_blank"     
+                        class="underline hover:text-gray-600 transition-colors text-[var(--text-main)]"
                     >
                         Dr. Stas Tiomkin
                     </a>
                     and am part of the CI^2 Lab. My current research interests include robotics control, multi-modal sensing and processing, and process optimization. 
 
                 </p>
+                <p class="py-6 text-[var(--text-main)]">
+                    Prior to Texas Tech, I completed my undergraduate degree in ECE at the University of Texas at Austin. 
+                    For fun, I enjoy photography, acoustic guitar, and working out. I also dabble in running, reading, playing video games, and other miscellaneous things.
                 </div>
             </div>
         </div>
     <div>
 
     </div>
-
 </BaseLayout>
 
 <style>

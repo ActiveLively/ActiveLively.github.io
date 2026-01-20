@@ -25,6 +25,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "daisyui": "^5.5.14"
   }
 }
