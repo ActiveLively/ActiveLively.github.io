@@ -1,14 +1,12 @@
 ---
 import Menu from "./Menu.astro";
 import Navigation from "./Navigation.astro";
-import ThemeIcon from './ThemeIcon.astro';
 
 ---
 
 <header>
   <nav>
     <div>
-      <ThemeIcon />
       <Menu />
     </div>
     <Navigation />
@@ -16,16 +14,28 @@ import ThemeIcon from './ThemeIcon.astro';
 </header>
 
 <style>
+    header {
+        position: sticky;               /* Stays at the top while scrolling */
+        top: 0;
+        z-index: 50;                    /* Sits above images and other content */
+        background-color: var(--bg-page);
+    }
     nav {
         display: flex;
         justify-content: space-between; /* Pushes div to left, Navigation to right */
         align-items: center;            /* Vertically centers items */
         padding-right: 3rem;            /* ADDS THE PADDING YOU ASKED FOR */
-        padding-top: 1rem;
-        padding-bottom: 1rem;
     }
   div {
     display: flex;
     justify-content: space-between;
+  }
+
+  /* Phones: Menu button on top, links drop down underneath */
+  @media screen and (max-width: 636px) {
+    nav {
+      flex-direction: column;
+      padding: 0.5rem 0 0;
+    }
   }
 </style>
