@@ -72,9 +72,15 @@ const highlightName = "J. Huang";
         flex-direction: column;
         justify-content: center;
         width: 100%;
-        max-width: 80ch;
+        max-width: 100ch;
         margin: 0 auto;
-        padding: 4rem 2rem;
+        /* ---- Spacing (1rem = 16px) ---- */
+        padding-top: 10rem;      /* GAP 2: space between About and Works (About's photo/text box adds 16px more above this) */
+        padding-bottom: 10rem;   /* GAP 3: space between Works and the photography section */
+        padding-left: 2rem;     /* space on the left side */
+        padding-right: 2rem;    /* space on the right side */
+        /* Size to the content instead of a full screen, to cut the empty space above and below */
+        min-height: auto;
         color: var(--text-main);
     }
     .section-title {

@@ -2,7 +2,7 @@
 ---
 
 <section id="about" class="about-content">
-    <div class="hero min-h-screen">
+    <div class="hero">
         <div class="hero-content flex-col lg:flex-row text-[--bg-page] max-w-3xl mx-auto px-8 gap-8 lg:gap-12">
             <img
                 src="https://res.cloudinary.com/dvwdetmhx/image/upload/v1768860907/DSC_9237-Enhanced-NR_Original_1_mkrw4s.jpg"
@@ -63,6 +63,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        /* Size to the content instead of a full screen, to cut the empty space above and below */
+        min-height: auto;
+
+        /* ---- Spacing (1rem = 16px) ----
+           The photo/text box also adds its own 16px on every side, on top of these. */
+        padding-top: 10rem;      /* GAP 1: space between the start (welcome) section and About */
+        padding-bottom: 0;      /* Bottom of About. Left at 0: the space before Works is set by Works' padding-top (GAP 2) */
     }
 
     /* Row of links under the description, styled like the nav bar:
