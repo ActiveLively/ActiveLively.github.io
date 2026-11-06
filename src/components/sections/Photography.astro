@@ -19,7 +19,7 @@ cloudinary.config({
 async function getImagesFromFolder(folderName: string) {
   try {
     const results = await cloudinary.search
-      .expression(`folder:${folderName}/*`) // Look inside this folder
+      .expression(`folder:"${folderName}"/*`) // Look inside this folder (quoted so names with spaces work)
       .sort_by('public_id', 'desc')         // Sort by name (or 'created_at')
       .max_results(30)                      // Limit to 30 images
       .execute();
@@ -43,6 +43,7 @@ async function getImagesFromFolder(folderName: string) {
 const banffPhotos = shuffle(await getImagesFromFolder('website/banff'));
 const rockiesPhotos = shuffle(await getImagesFromFolder('website/rockies'));
 const grads = shuffle(await getImagesFromFolder('website/grads'));
+const outdoorsPhotos = shuffle(await getImagesFromFolder('website/misc outdoors'));
 
 ---
 <section id="photography">
@@ -81,6 +82,15 @@ const grads = shuffle(await getImagesFromFolder('website/grads'));
         <Carousel images={grads} id="grads" />
     </div>
 
+    <div class="carousel-spacer"></div>
+
+    <div data-aos="fade-up">
+        <h2 class="carousel-title">Misc Outdoors</h2>
+        {outdoorsPhotos.length > 0
+            ? <Carousel images={outdoorsPhotos} id="misc outdoors" />
+            : <p class="carousel-empty">Photos coming soon.</p>}
+    </div>
+
     <div class="bottom-spacer"></div>
 </section>
 
@@ -94,6 +104,12 @@ const grads = shuffle(await getImagesFromFolder('website/grads'));
     padding: 1rem;
     justify-content: center;
     color: var(--text-main);
+  }
+  .carousel-empty {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-main);
+    opacity: 0.6;
   }
   .carousel-spacer {
     height: 5rem; /* Adjust this number to increase/decrease space */
