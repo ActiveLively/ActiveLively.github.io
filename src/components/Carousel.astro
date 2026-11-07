@@ -16,8 +16,15 @@ const { images, album = '' } = Astro.props;
   <div class="carousel carousel-center rounded-box">
     {images.map((photo) => (
       <div class="carousel-item">
+        <!-- Small copy here; the viewer loads data-full (the original) when opened.
+             width/height reserve the right space before the image arrives. -->
         <img
-          src={photo.src}
+          src={photo.thumb}
+          data-full={photo.full}
+          width={photo.width}
+          height={photo.height}
+          loading="lazy"
+          decoding="async"
           class="h-96 w-auto object-cover diffusable"
           alt={album ? `${album} photo` : 'Carousel image'}
           crossorigin="anonymous"

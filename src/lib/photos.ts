@@ -27,9 +27,20 @@ export interface PhotoMeta {
 }
 
 export interface Photo {
-  src: string;
+  /** Small, compressed copy for the carousels (~800 px tall, a few hundred KB) */
+  thumb: string;
+  /** The original file exactly as uploaded, loaded only in the photo viewer */
+  full: string;
+  width: number;
+  height: number;
   meta: PhotoMeta;
 }
+
+// Cloudinary resizes on the fly when options are added to the URL after /upload/:
+// c_limit,h_800 = at most 800 px tall (never enlarged), f_auto = best format the
+// browser supports (WebP/AVIF), q_auto = compression you can't see.
+const THUMB_OPTIONS = 'c_limit,h_800/f_auto/q_auto';
+const thumbUrl = (url: string) => url.replace('/upload/', `/upload/${THUMB_OPTIONS}/`);
 
 const CACHE_FILE = path.join(process.cwd(), 'node_modules', '.cache', 'cloudinary-exif.json');
 let cachePromise: Promise<Record<string, PhotoMeta>> | null = null;
@@ -107,16 +118,24 @@ function formatExif(m: Record<string, string> | null): PhotoMeta {
 
 export async function getPhotos(folderName: string): Promise<Photo[]> {
   try {
-    const results = await cloudinary.search
-      .expression(`folder:"${folderName}"/*`) // quoted so names with spaces work
-      .sort_by('public_id', 'desc')
-      .max_results(30)
-      .execute();
+    // Search returns at most 100 photos per call, so page through larger folders
+    const resources: any[] = [];
+    let cursor: string | undefined;
+    do {
+      let query = cloudinary.search
+        .expression(`folder:"${folderName}"/*`) // quoted so names with spaces work
+        .sort_by('public_id', 'desc')
+        .max_results(100);
+      if (cursor) query = query.next_cursor(cursor);
+      const page = await query.execute();
+      resources.push(...page.resources);
+      cursor = page.next_cursor;
+    } while (cursor);
 
     const cache = await loadCache();
     let changed = false;
 
-    const photos = await mapLimit(results.resources as any[], 6, async (file) => {
+    const photos = await mapLimit(resources, 6, async (file) => {
       const key = `${file.public_id}@${file.version}`;
       let meta = cache[key];
       if (!meta) {
@@ -124,7 +143,8 @@ export async function getPhotos(folderName: string): Promise<Photo[]> {
         meta = { ...formatExif(exif), size: `${file.width} × ${file.height}` };
         if (exif) { cache[key] = meta; changed = true; } // retry failures next time
       }
-      return { src: file.secure_url as string, meta };
+      const full = file.secure_url as string;
+      return { thumb: thumbUrl(full), full, width: file.width, height: file.height, meta };
     });
 
     if (changed) await saveCache(cache).catch((e) => console.warn('Could not write EXIF cache:', e));

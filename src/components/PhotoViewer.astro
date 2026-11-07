@@ -18,6 +18,11 @@
             <img class="pv-img" crossorigin="anonymous" alt="" draggable="false" />
           </div>
         </div>
+        <!-- Shown while the full-size original downloads -->
+        <div class="pv-loading" role="status" hidden>
+          <span class="loading loading-spinner loading-xs"></span>
+          <span>Loading full size</span>
+        </div>
         <button type="button" class="pv-nav pv-prev" aria-label="Previous photo">‹</button>
         <button type="button" class="pv-nav pv-next" aria-label="Next photo">›</button>
       </div>
@@ -152,6 +157,25 @@
     height: 100%;
     pointer-events: none;
   }
+
+  /* "Loading full size" pill, bottom-left of the stage */
+  #photo-viewer .pv-loading {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.55);
+    color: #fff;
+    font-size: 0.75rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  #photo-viewer .pv-loading[hidden] { display: none; }
 
   /* Previous / next arrows, pinned to the stage's edges */
   #photo-viewer .pv-nav {

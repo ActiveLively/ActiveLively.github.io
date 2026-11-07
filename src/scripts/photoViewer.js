@@ -30,9 +30,11 @@ let album = [];          // carousel <img>s of the open album
 let index = 0;
 let palette = [];        // palette of the photo on screen
 const paletteCache = new Map();
+let current = null;      // carousel <img> of the photo on screen
+let noiseFor = null;     // carousel <img> whose pixels the noise renderer holds
 
-// Not currentSrc: that keeps the previous URL until a newly set src has loaded
-const srcOf = (img) => img.src;
+// Palette and theme are keyed by the carousel copy's URL (one per photo)
+const keyOf = (img) => img.src;
 
 function setup() {
   const dialog = document.getElementById('photo-viewer');
@@ -40,6 +42,8 @@ function setup() {
   const q = (sel) => dialog.querySelector(sel);
   els = {
     dialog,
+    stage: q('.pv-stage'),
+    loading: q('.pv-loading'),
     frame: q('.pv-frame'),
     zoom: q('.pv-zoom'),
     img: q('.pv-img'),
@@ -66,7 +70,7 @@ function setup() {
   els.next.addEventListener('click', () => go(1));
 
   els.themeApply.addEventListener('click', () => {
-    applyPaletteTheme(palette, srcOf(els.img));
+    applyPaletteTheme(palette, keyOf(current));
     updateThemeButtons();
   });
   els.themeReset.addEventListener('click', () => {
@@ -94,13 +98,21 @@ function setup() {
   });
 
   dialog.addEventListener('close', () => {
+    clearTimeout(loadingTimer);
+    els.loading.hidden = true;
     stopAnim();
     setNoise(0);
     zoom.reset();
   });
-  // Keep the noise canvas matched to the photo if the window changes size
+  // Keep the photo fitted (and the noise matched to it) if the window changes size
   window.addEventListener('resize', () => {
-    if (dialog.open && t > 0) setNoise(t);
+    if (!dialog.open) return;
+    fitImage();
+    if (t > 0) setNoise(t);
+  });
+  // When the full-size original replaces the small copy, redraw any noise from it
+  els.img.addEventListener('load', () => {
+    if (t > 0) setNoise(t);
   });
   return true;
 }
@@ -121,10 +133,12 @@ function setNoise(value) {
     return;
   }
   // A newly set src that hasn't finished loading can't be drawn yet
-  if (!renderer.isLoaded(els.img) && !(els.img.complete && renderer.load(els.img))) {
+  if (renderer.isLoaded(els.img) || (els.img.complete && renderer.load(els.img))) {
+    noiseFor = current;
+  } else if (noiseFor !== current) {
     renderer.canvas.remove(); // never leave the previous photo's noise on screen
     return;
-  }
+  } // else: same photo, still loading at full size, keep noising the copy we have
   if (!renderer.canvas.isConnected) els.zoom.append(renderer.canvas);
   renderer.render(t);
 }
@@ -172,9 +186,14 @@ function go(delta) {
 
 // Fill the viewer with `img` (a carousel photo)
 function showPhoto(img) {
+  current = img;
   index = Math.max(0, album.indexOf(img));
-  els.img.src = srcOf(img);
+  img.loading = 'eager'; // the carousel copy may not have loaded yet (it's lazy)
+  // Show the small copy straight away (already downloaded), then the original
+  els.img.src = img.src;
   els.img.alt = img.alt;
+  fitImage();
+  loadFull(img);
   els.albumName.textContent = img.dataset.album || '';
   els.count.textContent = album.length > 1 ? `${index + 1} / ${album.length}` : '';
 
@@ -188,6 +207,43 @@ function showPhoto(img) {
   else img.addEventListener('load', () => showPalette(img), { once: true });
 
   revealInCarousel(img);
+}
+
+// Swap in the original file once it has downloaded, if still on that photo
+let loadingTimer = 0;
+function loadFull(img) {
+  clearTimeout(loadingTimer);
+  els.loading.hidden = true;
+  const url = img.dataset.full;
+  if (!url || url === img.src) return;
+
+  const full = new Image();
+  full.crossOrigin = 'anonymous'; // the noise and palette read its pixels
+  const done = (ok) => {
+    if (current !== img) return; // moved on to another photo meanwhile
+    clearTimeout(loadingTimer);
+    els.loading.hidden = true;
+    if (ok) els.img.src = url;
+  };
+  full.onload = () => done(true);
+  full.onerror = () => done(false); // keep showing the small copy
+  full.src = url;
+  // Only show the spinner if it takes a moment (not for photos already downloaded)
+  if (!full.complete) loadingTimer = setTimeout(() => (els.loading.hidden = false), 150);
+}
+
+// Size the photo from its real proportions to fill the stage, so the small copy
+// and the full-size original take up exactly the same space
+function fitImage() {
+  if (!current) return;
+  const w = Number(current.getAttribute('width')) || current.naturalWidth;
+  const h = Number(current.getAttribute('height')) || current.naturalHeight;
+  const sw = els.stage.clientWidth;
+  const sh = els.stage.clientHeight;
+  if (!w || !h || !sw || !sh) return; // not laid out yet
+  const k = Math.min(sw / w, sh / h);
+  els.img.style.width = `${Math.floor(w * k)}px`;
+  els.img.style.height = `${Math.floor(h * k)}px`;
 }
 
 // Scroll the carousel behind the dialog so it ends on the photo you were viewing
@@ -308,10 +364,10 @@ function renderPalette(colours) {
 }
 
 function showPalette(img) {
-  const key = srcOf(img);
+  const key = keyOf(img);
   if (!paletteCache.has(key)) paletteCache.set(key, extractPalette(img));
   // The user may have moved on to another photo while this one loaded
-  if (srcOf(els.img) !== key) return;
+  if (current !== img) return;
   palette = paletteCache.get(key);
   renderPalette(palette);
   updateThemeButtons();
@@ -319,7 +375,7 @@ function showPalette(img) {
 
 function updateThemeButtons() {
   const active = activeThemeKey();
-  const isThisPhoto = active !== null && active === srcOf(els.img);
+  const isThisPhoto = active !== null && current !== null && active === keyOf(current);
   els.themeApply.disabled = !palette.length || isThisPhoto;
   els.themeApply.textContent = isThisPhoto ? 'Page theme applied' : 'Use as page theme';
   els.themeReset.hidden = active === null;
@@ -339,4 +395,5 @@ export function openPhotoViewer(img) {
 
   showPhoto(img);
   els.dialog.showModal();
+  fitImage(); // the stage only has a size once the dialog is open
 }
