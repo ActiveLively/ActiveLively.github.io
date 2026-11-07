@@ -1,31 +1,9 @@
 ---
-// Timeline entries, newest first.
-// To add one, copy an entry below and fill it in.
-// `link` is optional: when set, the title becomes a link.
-interface Entry {
-    date: string;
-    type: string;
-    title: string;
-    detail?: string;
-    authors?: string;
-    description?: string;
-    link?: string;
-}
-
-const timeline: Entry[] = [
-    {
-        date: "Oct 2026",
-        type: "Patent",
-        title: "Conveyor health inspection method",
-        detail: "U.S. Patent 12,754,143 · Assignee: GM Global Technology Operations LLC",
-        authors: "D. J. Carroll, C. A. Wiley, D. R. Kracko, N. S. Ellis, P. L. Griggs, E. R. Newcomb, R. Hardin, and J. Huang",
-        description: "Methods for analyzing sub-millimeter wear and structural stability of I-beams and double C-beams.",
-        // link: "https://patents.google.com/patent/US12754143",
-    },
-];
-
-// Show your own name in bold in author lists
-const highlightName = "J. Huang";
+import TimelineItem from '../TimelineItem.astro';
+// Timeline entries are <TimelineItem> tags below, newest first: they show in
+// the order you write them. Only date, type and title are required; text
+// between the opening and closing tags becomes the description.
+// See src/components/TimelineItem.astro for every option.
 ---
 
 <section id="works" class="works-content">
@@ -35,32 +13,25 @@ const highlightName = "J. Huang";
         <h3 class="timeline-heading">Timeline</h3>
 
         <ol class="timeline-list">
-            {timeline.map((item) => (
-                <li class="timeline-item">
-                    <span class="timeline-dot" aria-hidden="true"></span>
-                    <p class="timeline-meta">
-                        <span>{item.date}</span>
-                        <span class="timeline-type">{item.type}</span>
-                    </p>
-                    <h4 class="timeline-title">
-                        {item.link
-                            ? <a href={item.link} target="_blank" class="timeline-link">{item.title}</a>
-                            : item.title}
-                    </h4>
-                    {item.detail && <p class="timeline-detail">{item.detail}</p>}
-                    {item.authors && (
-                        <p class="timeline-authors">
-                            {item.authors.split(highlightName).map((part, i, parts) => (
-                                <>
-                                    {part}
-                                    {i < parts.length - 1 && <strong>{highlightName}</strong>}
-                                </>
-                            ))}
-                        </p>
-                    )}
-                    {item.description && <p class="timeline-description">{item.description}</p>}
-                </li>
-            ))}
+            <TimelineItem
+                date=""
+                type=""
+                title="More on the way! (that's the plan at least :p)"
+                detail=""
+                authors=""
+            >
+            </TimelineItem>
+
+            <TimelineItem
+                date="Oct 2026"
+                type="Patent"
+                title="Conveyor health inspection method"
+                detail="U.S. Patent 12,754,143 · Assignee: GM Global Technology Operations LLC"
+                authors="D. J. Carroll, C. A. Wiley, D. R. Kracko, N. S. Ellis, P. L. Griggs, E. R. Newcomb, R. Hardin, and J. Huang"
+            >
+                Methods for analyzing sub-millimeter wear and structural stability of I-beams and double C-beams.
+            </TimelineItem>
+            <!-- To link the title, add: link="https://patents.google.com/patent/US12754143" -->
         </ol>
     </div>
 </section>
@@ -107,58 +78,5 @@ const highlightName = "J. Huang";
         padding: 0;
         /* The vertical line down the left side */
         border-left: 2px solid color-mix(in srgb, var(--text-main) 20%, transparent);
-    }
-    .timeline-item {
-        position: relative;
-        padding: 0 0 2rem 1.5rem;
-    }
-    .timeline-item:last-child {
-        padding-bottom: 0;
-    }
-    .timeline-dot {
-        position: absolute;
-        left: -7px;          /* centers the 12px dot on the 2px line */
-        top: 0.3rem;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: var(--text-main);
-    }
-    .timeline-meta {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-        font-size: 0.8rem;
-        opacity: 0.7;
-    }
-    .timeline-type {
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .timeline-title {
-        font-size: 1rem;
-        font-weight: bold;
-        margin: 0.25rem 0;
-    }
-    .timeline-link:hover,
-    .timeline-link:focus-visible {
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-thickness: 2px;
-    }
-    .timeline-detail,
-    .timeline-authors,
-    .timeline-description {
-        font-size: 0.875rem;
-        line-height: 1.6;
-    }
-    .timeline-authors {
-        opacity: 0.8;
-    }
-    .timeline-authors strong {
-        white-space: nowrap; /* keep "J. Huang" on one line */
-    }
-    .timeline-description {
-        margin-top: 0.5rem;
     }
 </style>

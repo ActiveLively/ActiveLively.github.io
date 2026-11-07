@@ -1,6 +1,7 @@
 ---
 import Carousel from '../Carousel.astro';
-import { v2 as cloudinary } from 'cloudinary';
+import PhotoViewer from '../PhotoViewer.astro';
+import { getPhotos } from '../../lib/photos';
 import { getCldImageUrl } from 'astro-cloudinary/helpers';
 
 const backgroundUrl = getCldImageUrl({
@@ -10,28 +11,6 @@ const backgroundUrl = getCldImageUrl({
   crop: 'fill'                       // Ensures it covers the area
 });
 
-cloudinary.config({
-    cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: import.meta.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY,
-    api_secret: import.meta.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_API_SECRET,
-});
-
-async function getImagesFromFolder(folderName: string) {
-  try {
-    const results = await cloudinary.search
-      .expression(`folder:"${folderName}"/*`) // Look inside this folder (quoted so names with spaces work)
-      .sort_by('public_id', 'desc')         // Sort by name (or 'created_at')
-      .max_results(30)                      // Limit to 30 images
-      .execute();
-
-    // Map the results to just the URL or Public ID
-    return results.resources.map((file: any) => file.secure_url);
-  } catch (error) {
-    console.error(`Error fetching ${folderName}:`, error);
-    return [];
-  }
-}
-
  function shuffle(array: any[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -40,10 +19,10 @@ async function getImagesFromFolder(folderName: string) {
   return array;
 }
 
-const banffPhotos = shuffle(await getImagesFromFolder('website/banff'));
-const rockiesPhotos = shuffle(await getImagesFromFolder('website/rockies'));
-const grads = shuffle(await getImagesFromFolder('website/grads'));
-const outdoorsPhotos = shuffle(await getImagesFromFolder('website/misc outdoors'));
+const banffPhotos = shuffle(await getPhotos('website/banff'));
+const rockiesPhotos = shuffle(await getPhotos('website/rockies'));
+const grads = shuffle(await getPhotos('website/grads'));
+const outdoorsPhotos = shuffle(await getPhotos('website/misc outdoors'));
 
 ---
 <section id="photography">
@@ -56,7 +35,7 @@ const outdoorsPhotos = shuffle(await getImagesFromFolder('website/misc outdoors'
         <div class="max-w-md">
             <h1 class="mb-5 text-5xl font-bold">some pics!</h1>
             <p class="mb-5">
-            <!-- empty text right now -->
+            scroll the carousel. click a photo for its details, or press and hold to diffuse it
             </p>
         </div>
         </div>
@@ -65,21 +44,21 @@ const outdoorsPhotos = shuffle(await getImagesFromFolder('website/misc outdoors'
 
     <div data-aos="fade-up">
         <h2 class="carousel-title">Banff</h2>
-        <Carousel images={banffPhotos} id="banff" />
+        <Carousel images={banffPhotos} id="banff" album="Banff" />
     </div>
     
     <div class="carousel-spacer"></div>
 
     <div data-aos="fade-up">
         <h2 class="carousel-title">Rocky Mountain National Park</h2>
-        <Carousel images={rockiesPhotos} id="rockies" />
+        <Carousel images={rockiesPhotos} id="rockies" album="Rocky Mountain National Park" />
     </div>
 
     <div class="carousel-spacer"></div>
 
     <div data-aos="fade-up">
         <h2 class="carousel-title">Graduation</h2>
-        <Carousel images={grads} id="grads" />
+        <Carousel images={grads} id="grads" album="Graduation" />
     </div>
 
     <div class="carousel-spacer"></div>
@@ -87,11 +66,13 @@ const outdoorsPhotos = shuffle(await getImagesFromFolder('website/misc outdoors'
     <div data-aos="fade-up">
         <h2 class="carousel-title">Misc Outdoors</h2>
         {outdoorsPhotos.length > 0
-            ? <Carousel images={outdoorsPhotos} id="misc outdoors" />
+            ? <Carousel images={outdoorsPhotos} id="misc outdoors" album="Misc Outdoors" />
             : <p class="carousel-empty">Photos coming soon.</p>}
     </div>
 
     <div class="bottom-spacer"></div>
+
+    <PhotoViewer />
 </section>
 
 

@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@plugin "daisyui";
+/* The site has no dark design, so keep daisyUI components (buttons, the photo
+   viewer, sliders) on the light theme even when the OS is in dark mode */
+@plugin "daisyui" {
+  themes: light --default;
+}
 
 
 :root {

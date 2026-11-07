@@ -1,0 +1,114 @@
+---
+// src/components/TimelineItem.astro
+// One entry in the works timeline. Use it inside <ol class="timeline-list">:
+//
+//   <TimelineItem
+//       date="Oct 2026"
+//       type="Patent"
+//       title="Conveyor health inspection method"
+//       detail="U.S. Patent 12,754,143"
+//       authors="D. J. Carroll, ... and J. Huang"
+//       link="https://..."
+//   >
+//       Optional description goes here. It can include <a href="...">links</a> or <em>formatting</em>.
+//   </TimelineItem>
+//
+// Only date, type and title are required.
+
+interface Props {
+    date: string;
+    type: string;
+    title: string;
+    detail?: string;
+    authors?: string;
+    link?: string;
+    /** Name shown in bold inside `authors` */
+    highlight?: string;
+}
+
+const { date, type, title, detail, authors, link, highlight = "J. Huang" } = Astro.props;
+const authorParts = authors ? authors.split(highlight) : [];
+const hasDescription = Astro.slots.has("default");
+---
+
+<li class="timeline-item">
+    <span class="timeline-dot" aria-hidden="true"></span>
+    <p class="timeline-meta">
+        <span>{date}</span>
+        <span class="timeline-type">{type}</span>
+    </p>
+    <h4 class="timeline-title">
+        {link ? <a href={link} target="_blank" rel="noopener" class="timeline-link">{title}</a> : title}
+    </h4>
+    {detail && <p class="timeline-detail">{detail}</p>}
+    {authors && (
+        <p class="timeline-authors">
+            {authorParts.map((part, i) => (
+                <>
+                    {part}
+                    {i < authorParts.length - 1 && <strong>{highlight}</strong>}
+                </>
+            ))}
+        </p>
+    )}
+    {hasDescription && <p class="timeline-description"><slot /></p>}
+</li>
+
+<style>
+    .timeline-item {
+        position: relative;
+        /* Order is clockwise from the top: top, right, bottom, left (1rem = 16px)
+           - bottom (2rem): space between timeline items, raise it for more room
+           - left (1.5rem): gap between the vertical line and the text */
+        padding: 0 0 2rem 1.5rem;
+    }
+    .timeline-item:last-child {
+        padding-bottom: 0;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: -7px;          /* centers the 12px dot on the 2px line */
+        top: 0.3rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--text-main);
+    }
+    .timeline-meta {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+    .timeline-type {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .timeline-title {
+        font-size: 1rem;
+        font-weight: bold;
+        margin: 0.25rem 0;
+    }
+    .timeline-link:hover,
+    .timeline-link:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-thickness: 2px;
+    }
+    .timeline-detail,
+    .timeline-authors,
+    .timeline-description {
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    .timeline-authors {
+        opacity: 0.8;
+    }
+    .timeline-authors strong {
+        white-space: nowrap; /* keep the highlighted name on one line */
+    }
+    .timeline-description {
+        margin-top: 0.5rem;
+    }
+</style>
